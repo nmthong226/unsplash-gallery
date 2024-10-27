@@ -47,15 +47,15 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
     }, []);
 
     return (
-        <div className="flex flex-col w-full h-full items-center">
-            <h1 className="text-3xl font-bold mb-4">Unsplash Gallery</h1>
+        <div className="flex flex-col w-full p-2 h-full items-center">
+            <h1 className="text-3xl font-bold my-10">Unsplash Gallery</h1>
             <InfiniteScroll
                 dataLength={photos.length}
                 next={fetchPhotos}
                 hasMore={hasMore}
                 loader={''}
                 endMessage={<p>No more photos to display.</p>}
-                className="w-full m-10"
+                className="w-full"
             >
                 <Masonry
                     breakpointCols={masonryBreakpoints}
