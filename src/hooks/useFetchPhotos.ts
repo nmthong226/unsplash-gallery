@@ -20,7 +20,6 @@ const useFetchPhotos = () => {
           Authorization: `Client-ID ${import.meta.env.VITE_UNSPLASH_ACCESS_KEY}`,
         },
       });
-      console.log(response.data);
       const newPhotos = response.data.map((photo: any) => ({
         id: photo.id,
         urls: photo.urls,
