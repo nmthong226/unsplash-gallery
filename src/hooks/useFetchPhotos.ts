@@ -20,27 +20,30 @@ const useFetchPhotos = () => {
           Authorization: `Client-ID ${import.meta.env.VITE_UNSPLASH_ACCESS_KEY}`,
         },
       });
-      const newPhotos = response.data.map((photo: any) => ({
-        id: photo.id,
-        urls: photo.urls,
-        author: {
-          username: photo.user.username,
-          avatar: photo.user.profile_image.small,
-        },
-        title: photo.description || photo.alt_description || '',
-        description: photo.description || photo.alt_description || '',
-        topic: photo.topic_submissions.title || '',
-        date: new Date(photo.updated_at),
-        likes: photo.likes,
-        slug: photo.alternative_slugs.en
-      }));
+      const newPhotos = response.data.map((photo: any) => {
+        const topicKey = photo.topic_submissions ? Object.keys(photo.topic_submissions)[0] : '';
+        const topic = topicKey ? topicKey.replace(/-/g, ' ') : ''; // Replace hyphens with spaces if needed
+        return {
+          id: photo.id,
+          urls: photo.urls,
+          author: {
+            username: photo.user.username,
+            avatar: photo.user.profile_image.small,
+          },
+          title: photo.description || photo.alt_description || '',
+          description: photo.description || photo.alt_description || '',
+          topic: topic,
+          date: new Date(photo.updated_at),
+          likes: photo.likes,
+          slug: photo.alternative_slugs?.en || '',
+        };
+      });
       setPhotos((prevPhotos) => {
         const uniquePhotos = newPhotos.filter(
           (newPhoto: any) => !prevPhotos.some((photo) => photo.id === newPhoto.id)
         );
         return [...prevPhotos, ...uniquePhotos];
       });
-
       setHasMore(newPhotos.length === 10); // If fewer than 10 photos, no more pages
       setPage((prevPage) => prevPage + 1);
     } catch (error) {
@@ -49,7 +52,6 @@ const useFetchPhotos = () => {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     fetchPhotos();
   }, []);
