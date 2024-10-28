@@ -48,7 +48,10 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
 
     return (
         <div className="flex flex-col w-full p-2 h-full items-center">
-            <h1 className="text-3xl font-bold my-10">Unsplash Gallery</h1>
+            <div className='flex flex-col items-center justify-center my-10'>
+                <h1 className="flex items-center text-lg md:text-xl lg:text-2xl font-bold">📷 Unsplash Gallery</h1>
+                <p className='font-thin'>✨ nmthong226</p>
+            </div>
             <InfiniteScroll
                 dataLength={photos.length}
                 next={fetchPhotos}
