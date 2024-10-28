@@ -5,10 +5,12 @@ import useFetchPhotos from '@/hooks/useFetchPhotos';
 import './App.css';
 
 function App() {
-  const { photos, fetchPhotos, hasMore, loading } = useFetchPhotos();
+  const { photos, fetchPhotos, hasMore, loading, error } = useFetchPhotos();
+
   return (
     <Router>
       <div className="flex w-full h-screen">
+        {error && <div className="error-message">Oops! {error}</div>}
         <Routes>
           <Route
             path="/photos"
