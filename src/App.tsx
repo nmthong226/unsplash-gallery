@@ -9,7 +9,7 @@ function App() {
 
   return (
     <Router>
-      <div className="flex w-full h-screen">
+      <div className="flex flex-col w-full h-screen">
         {error && <div className="error-message">Oops! {error}</div>}
         <Routes>
           <Route
