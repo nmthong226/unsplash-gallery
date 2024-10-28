@@ -1,5 +1,5 @@
 // App.tsx
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import PhotoGallery from '@/components/PhotoGallery';
 import useFetchPhotos from '@/hooks/useFetchPhotos';
 import './App.css';
@@ -21,6 +21,7 @@ function App() {
               />
             }
           />
+          <Route path="*" element={<Navigate to="/photos" />} />
         </Routes>
       </div>
     </Router>
