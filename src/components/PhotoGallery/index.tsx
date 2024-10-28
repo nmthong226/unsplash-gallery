@@ -8,6 +8,7 @@ interface PhotoGalleryProps {
     fetchPhotos: () => void;
     hasMore: boolean;
     loading: boolean;
+    error?: string | null;  // Add optional error prop
 }
 
 const PhotoGallery: React.FC<PhotoGalleryProps> = ({
@@ -15,6 +16,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
     fetchPhotos,
     hasMore,
     loading,
+    error,
 }) => {
     const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
     const [showModal, setShowModal] = useState(false);
@@ -25,6 +27,10 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
         700: 1,
     };
 
+    /**
+     * Handles photo click event.
+     * @param {Photo} photo The selected photo
+     */
     const handlePhotoClick = (photo: Photo) => {
         setSelectedPhoto(photo);
         setShowModal(true);
@@ -38,7 +44,6 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
 
     useEffect(() => {
         const handlePopState = () => {
-            // Close modal if back button is clicked
             setShowModal(false);
         };
 
@@ -52,6 +57,9 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                 <h1 className="flex items-center text-lg md:text-xl lg:text-2xl font-bold">📷 Unsplash Gallery</h1>
                 <p className='font-thin'>✨ nmthong226</p>
             </div>
+
+            {error && <div className="error-message text-red-500 mb-4">{error}</div>} {/* Display error message */}
+
             <InfiniteScroll
                 dataLength={photos.length}
                 next={fetchPhotos}
@@ -88,6 +96,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                     ))}
                 </Masonry>
             </InfiniteScroll>
+
             {loading && (
                 <div className="flex w-full justify-center items-center mt-24">
                     <div className="w-16 h-16 border-[6px] border-dashed rounded-full border-t-blue-700 animate-spin"></div>
