@@ -1,4 +1,3 @@
-// App.tsx
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import PhotoGallery from '@/components/PhotoGallery';
 import useFetchPhotos from '@/hooks/useFetchPhotos';
@@ -10,7 +9,6 @@ function App() {
   return (
     <Router>
       <div className="flex flex-col w-full h-screen">
-        {error && <div className="error-message">Oops! {error}</div>}
         <Routes>
           <Route
             path="/photos"
@@ -20,6 +18,7 @@ function App() {
                 fetchPhotos={fetchPhotos}
                 hasMore={hasMore}
                 loading={loading}
+                error={error}  // Pass error to PhotoGallery
               />
             }
           />
