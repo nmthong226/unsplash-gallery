@@ -8,7 +8,7 @@ interface PhotoGalleryProps {
     fetchPhotos: () => void;
     hasMore: boolean;
     loading: boolean;
-    error?: string | null;  // Add optional error prop
+    error?: string | null; // Add optional error prop
 }
 
 const PhotoGallery: React.FC<PhotoGalleryProps> = ({
@@ -27,10 +27,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
         700: 1,
     };
 
-    /**
-     * Handles photo click event.
-     * @param {Photo} photo The selected photo
-     */
+    // Function to handle photo click event
     const handlePhotoClick = (photo: Photo) => {
         setSelectedPhoto(photo);
         setShowModal(true);
@@ -39,17 +36,32 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
 
     const closeModal = () => {
         setShowModal(false);
+        setSelectedPhoto(null);
         window.history.replaceState(null, '', '/photos');
     };
 
     useEffect(() => {
         const handlePopState = () => {
+            // When navigating back, close the modal
             setShowModal(false);
         };
 
         window.addEventListener('popstate', handlePopState);
         return () => window.removeEventListener('popstate', handlePopState);
     }, []);
+
+    // Check URL on component mount to set the modal if a photo slug is present
+    useEffect(() => {
+        const currentPath = window.location.pathname;
+        const photoSlug = currentPath.split('/').pop(); // Get the last part of the URL
+
+        // Find the photo with the matching slug
+        const photo = photos.find((p) => p.slug === photoSlug);
+        if (photo) {
+            setSelectedPhoto(photo); 
+            setShowModal(true);
+        }
+    }, [photos, selectedPhoto]);
 
     return (
         <div className="flex flex-col w-full p-2 h-full items-center">
