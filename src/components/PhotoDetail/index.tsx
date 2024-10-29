@@ -38,7 +38,7 @@ const PhotoDetail: React.FC<PhotoDetailProps> = ({ selectedPhoto, showModal, set
                   <DownloadButton imageUrl={selectedPhoto.urls.raw} sizes={downloadOptions} label="Download" />
                 </div>
                 <div className="flex items-center justify-center relative p-6 flex-auto">
-                  <img src={selectedPhoto.urls.small} alt={selectedPhoto.title} className="w-auto h-[320px] md:h-[400px] lg:h-[540px] object-cover" />
+                  <img src={selectedPhoto.urls.regular} alt={selectedPhoto.title} className="w-auto h-[320px] md:h-[400px] lg:h-[540px] object-cover" />
                 </div>
                 <div className="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between p-6 rounded-b text-sm">
                   <div className='flex space-x-10 sm:space-x-6 md:space-x-12 lg:space-x-20 max-sm:mb-4'>
