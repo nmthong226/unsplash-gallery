@@ -1,50 +1,53 @@
-# React + TypeScript + Vite
+# IA02 - Unsplash Photo Gallery
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Project Overview
+The Unsplash Photo Gallery is a web application designed to showcase beautiful photos sourced from the Unsplash API. This project aims to provide users with an engaging platform to explore, view, and interact with a vast collection of high-quality images. Users can scroll through a visually appealing photo gallery, click on images to view details, and seamlessly load more photos as they explore.
 
-Currently, two official plugins are available:
+## Features
+- **Infinite Scroll**: Automatically loads more photos as users scroll down the gallery.
+- **Photo Details**: Users can click on any photo to view additional information about it, including the photographer's name and avatar.
+- **Responsive Design**: The layout adapts to different screen sizes, ensuring a great user experience on both mobile and desktop devices.
+- **Error Handling**: Displays an error page for invalid routes, ensuring users are always directed to appropriate content.
+- **Loading State**: Indicates when photos are being fetched, enhancing the user experience.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Technologies Used
+- **Frontend**: React, TypeScript, Vite
+- **Styling**: Tailwind CSS
+- **State Management**: React Hooks
+- **Routing**: React Router
+- **Data Fetching**: Axios (or Fetch API)
 
-## Expanding the ESLint configuration
+## Installation
+To run the Unsplash Photo Gallery locally, follow these steps:
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+1. Clone the repository:
+   ```bash
+   git clone <repository-url>
+   cd IA02-Unsplash-Photo-Gallery
+    ```
+2. Install the dependencies:
+    ```
+    npm install
+    ```
+3. Start the development server:
+    ```bash
+    npm run dev
+    ```
+4. Open your browser and navigate to http://localhost:5713
 
-- Configure the top-level `parserOptions` property like this:
+## API Usage
+The application utilizes the Unsplash API to fetch photos. Ensure you have an API key from Unsplash to access the data. You can sign up for an API key at Unsplash Developers.
+    
+    .env  
+    VITE_UNSPLASH_ACCESS_KEY=YOUR_KEY
+    
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## Contributing
+Contributions are welcome! If you have suggestions or improvements, feel free to open an issue or submit a pull request.
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## License
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+## Acknowledgments
+Special thanks to Unsplash for providing high-quality images.
+Thanks to all the contributors and community for their support and feedback.
