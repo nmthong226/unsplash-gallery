@@ -27,7 +27,6 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
         700: 1,
     };
 
-    // Function to handle photo click event
     const handlePhotoClick = (photo: Photo) => {
         setSelectedPhoto(photo);
         setShowModal(true);
@@ -42,7 +41,6 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
 
     useEffect(() => {
         const handlePopState = () => {
-            // When navigating back, close the modal
             setShowModal(false);
         };
 
@@ -50,15 +48,13 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
         return () => window.removeEventListener('popstate', handlePopState);
     }, []);
 
-    // Check URL on component mount to set the modal if a photo slug is present
     useEffect(() => {
         const currentPath = window.location.pathname;
-        const photoSlug = currentPath.split('/').pop(); // Get the last part of the URL
+        const photoSlug = currentPath.split('/').pop();
 
-        // Find the photo with the matching slug
         const photo = photos.find((p) => p.slug === photoSlug);
         if (photo) {
-            setSelectedPhoto(photo); 
+            setSelectedPhoto(photo);
             setShowModal(true);
         }
     }, [photos, selectedPhoto]);
@@ -70,7 +66,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                 <p className='font-thin'>✨ nmthong226</p>
             </div>
 
-            {error && <div className="error-message text-red-500 mb-4">{error}</div>} {/* Display error message */}
+            {error && <div className="error-message text-red-500 mb-4">{error}</div>}
 
             <InfiniteScroll
                 dataLength={photos.length}
@@ -89,7 +85,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                         <div
                             key={photo.id}
                             onClick={() => handlePhotoClick(photo)}
-                            className="relative group hover:cursor-pointer overflow-hidden rounded-md mb-4"
+                            className="relative group hover:cursor-zoom-in overflow-hidden rounded-md mb-4"
                         >
                             <img
                                 src={photo.urls.small}
@@ -103,6 +99,10 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                                         <span className="text-sm md:text-base">{photo.author.username}</span>
                                     </div>
                                 </div>
+                            </div>
+                            {/* Tooltip-like caption on hover */}
+                            <div className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 bottom-10 bg-black text-white text-sm font-bold px-2 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                {photo.description || 'No description available.'}
                             </div>
                         </div>
                     ))}
