@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Masonry from 'react-masonry-css';
 import PhotoDetail from '@/components/PhotoDetail';
+import './style.css';
+import ThemeButton from '../ui/ThemeButton';
+import { useNavigate } from 'react-router-dom';
 
 interface PhotoGalleryProps {
     photos: Photo[];
@@ -58,12 +61,38 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
             setShowModal(true);
         }
     }, [photos, selectedPhoto]);
-
+    const navigate = useNavigate();
+    const navigateToSignUp = () => {
+        navigate('/sign-up', { replace: true });
+    }
+    const navigateToSignIn = () => {
+        navigate('/login', { replace: true });
+    }
     return (
-        <div className="flex flex-col w-full p-2 h-full items-center">
-            <div className='flex flex-col items-center justify-center my-10'>
-                <h1 className="flex items-center text-lg md:text-xl lg:text-2xl font-bold">📷 Unsplash Gallery</h1>
-                <p className='font-thin'>✨ nmthong226</p>
+        <div className="flex flex-col w-full p-2 px-0 md:px-20 lg:px-40 h-full items-center">
+            <div className='relative flex flex-row items-center justify-center my-10 p-2 bg-gray-50 border rounded-lg w-full'>
+                <ThemeButton toggleTheme={() => { }} className='absolute top-1/2 left-2 transform -translate-y-1/2' />
+                <div className='flex flex-col justify-center items-center'>
+                    <h1 className="flex items-center text-lg lg:text-xl font-bold">Unsplash Gallery</h1>
+                    <a
+                        href='https://github.com/nmthong226'
+                        target='_blank'
+                        className='font-thin text-sm text-gray-700'>
+                        nmthong226
+                    </a>
+                </div>
+                <div className='flex absolute top-1/2 right-2 transform -translate-y-1/2 space-x-1'>
+                    <button
+                        onClick={navigateToSignUp}
+                        className=' text-zinc-900 hover:text-zinc-600 py-1 px-4 rounded-lg'>
+                        Sign up
+                    </button>
+                    <button
+                        onClick={navigateToSignIn}
+                        className=' bg-zinc-900 text-white hover:bg-white hover:text-zinc-900 hover:border-zinc-900 border border-gray-50  py-1 px-4 rounded-lg'>
+                        Log In
+                    </button>
+                </div>
             </div>
 
             {error && <div className="error-message text-red-500 mb-4">{error}</div>}
@@ -72,11 +101,12 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                 dataLength={photos.length}
                 next={fetchPhotos}
                 hasMore={hasMore}
-                loader={''}
+                loader={'Loading...'}
                 endMessage={<p>No more photos to display.</p>}
                 className="w-full"
             >
                 <Masonry
+                    key={photos.length}
                     breakpointCols={masonryBreakpoints}
                     className="flex gap-6 masonry-grid"
                     columnClassName="masonry-grid_column"
@@ -86,6 +116,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                             key={photo.id}
                             onClick={() => handlePhotoClick(photo)}
                             className="relative group hover:cursor-zoom-in overflow-hidden rounded-md mb-4"
+                            title={`${photo.title}`}
                         >
                             <img
                                 src={photo.urls.small}
@@ -99,10 +130,6 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                                         <span className="text-sm md:text-base">{photo.author.username}</span>
                                     </div>
                                 </div>
-                            </div>
-                            {/* Tooltip-like caption on hover */}
-                            <div className="absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 bottom-10 bg-black text-white text-sm font-bold px-2 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                {photo.description || 'No description available.'}
                             </div>
                         </div>
                     ))}
