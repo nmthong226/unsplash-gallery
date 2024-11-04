@@ -1,13 +1,17 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-    darkMode: ["class"],
+	darkMode: ["class"],
 	content: [
 		"./index.html",
 		"./src/**/*.{js,ts,jsx,tsx}",
-	  ], 
+	],
 	theme: {
-  	extend: {}
-  },
-  plugins: [require("tailwindcss-animate")],
+		extend: {
+			fontFamily: {
+				sans: ['Roboto', 'sans-serif'],
+			},
+		},
+	},
+	plugins: [require("tailwindcss-animate")],
 }
 
