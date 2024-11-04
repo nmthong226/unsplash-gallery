@@ -3,6 +3,8 @@ import PhotoGallery from '@/components/PhotoGallery';
 import NotFound from '@/pages/NotFound';
 import useFetchPhotos from '@/hooks/useFetchPhotos';
 import './App.css';
+import SignUp from './pages/SignUp';
+import LogIn from './pages/LogIn';
 
 function App() {
   const { photos, fetchPhotos, hasMore, loading, error } = useFetchPhotos();
@@ -34,6 +36,8 @@ function App() {
               />
             }
           />
+          <Route path='/sign-up' element={<SignUp />} />
+          <Route path='/login' element={<LogIn />} />
           {/* Catch-all route for invalid paths */}
           <Route path="*" element={<NotFound />} />
         </Routes>
