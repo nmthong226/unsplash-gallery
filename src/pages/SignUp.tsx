@@ -3,7 +3,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useForm } from 'react-hook-form';
 import { ErrorMessage } from "@hookform/error-message";
 import { useNavigate } from "react-router-dom";
-
+import axios from 'axios'; // Import axios
 
 const SignUp = () => {
     const [showPassword, setShowPassword] = useState(false);
@@ -19,15 +19,22 @@ const SignUp = () => {
             criteriaMode: "firstError",
         }
     );
-    const onSubmit = (data: any) => {
-        console.log('Submitted Data:', data);
-        // To log individual fields, you can access them like this:
-        console.log('Username:', data.Username);
-        console.log('Email:', data.Email);
-        console.log('Password:', data.Password);
-    };
-    console.log(errors);
 
+    const onSubmit = async (data: any) => {
+        try {
+            const response = await axios.post('http://localhost:3000/auth/register', {
+                username: data.Username,
+                email: data.Email,
+                password: data.Password,
+            });
+            console.log('Response:', response.data);
+            // Redirect to login or show success message
+            navigate("/login", { replace: true });
+        } catch (error) {
+            console.error('Error during signup:', error);
+            // Handle the error (show a notification, etc.)
+        }
+    };
 
     const calculateStrength = (password: string) => {
         let strength = 0;
@@ -123,14 +130,13 @@ const SignUp = () => {
                         render={({ message }) => <p className="text-[13px] text-red-700">*{message}</p>}
                     />
                 </div>
-                <div className="flex relative z-0 w-96 mb-2 group">
+                <div className="flex flex-col relative z-0 w-96 mb-2 group">
                     <input
                         type={showPassword ? "text" : "password"}
-                        id="floating_password"
+                        id="Password"
                         className="block py-4 px-2 w-full text-sm font-normal text-gray-900 bg-transparent border border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                         placeholder=" "
-                        {...register("Password", { required: true, minLength: 3, onChange: (e) => handlePasswordChange(e) }
-                        )} // minLength instead of min
+                        {...register("Password", { required: "Password is required", minLength: { value: 3, message: "Min length is 3" }, onChange: (e) => handlePasswordChange(e) })}
                     />
                     <label
                         htmlFor="Password"
@@ -143,6 +149,11 @@ const SignUp = () => {
                         <FaEye className={`${showPassword ? "" : "hidden"}`} />
                         <FaEyeSlash className={`${showPassword ? "hidden" : ""}`} />
                     </div>
+                    <ErrorMessage
+                        errors={errors}
+                        name="Password"
+                        render={({ message }) => <p className="text-[13px] text-red-700">*{message}</p>}
+                    />
                 </div>
                 <div className="flex z-0 w-96">
                     <div className="flex items-center space-x-1">
@@ -154,17 +165,22 @@ const SignUp = () => {
                             ></div>
                         ))}
                     </div>
-                    <div className={`flex items-center text-[13px] h-4 text-gray-600 ml-2 my-2`}>{strengthText}</div>
+                    <div className={`flex items-center text-[13px] h-4 text-gray-600 ml-2 my-1 ${strengthPercentage >= 80 ? "text-green-600" : strengthPercentage >= 40 ? "text-yellow-500" : "text-red-600"}`}>
+                        {strengthText}
+                    </div>
                 </div>
-                <button type="submit" className="flex justify-center items-center relative z-0 w-96 h-14 group p-2 bg-blue-900 hover:bg-blue-800 hover:cursor-pointer">
-                    <p className="text-white font-bold">Sign Up</p>
-                </button>
-                <div className="flex justify-center items-center relative z-0 w-96 h-14 group p-2 bg-gray-100">
-                    <p className="text-gray-600 font-bold">Already have an account? <span className="hover:cursor-pointer font-bold underline text-blue-800" onClick={navigateToLogIn}>Login</span></p>
+                <div className="flex flex-col items-start mb-2">
+                    <button type="submit" className="text-white bg-blue-600 hover:bg-blue-700 w-full h-12 rounded-md transition duration-200">
+                        Sign Up
+                    </button>
                 </div>
+                <p className="text-sm text-gray-600">
+                    Already have an account?{" "}
+                    <span onClick={navigateToLogIn} className="text-blue-600 cursor-pointer hover:underline">Log In</span>
+                </p>
             </div>
         </form>
-    )
-}
+    );
+};
 
 export default SignUp;

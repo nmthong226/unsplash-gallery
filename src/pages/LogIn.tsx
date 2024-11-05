@@ -1,33 +1,40 @@
 import { useState } from "react";
-import { FaGoogle, FaApple,FaEye, FaEyeSlash, FaFacebook } from "react-icons/fa";
+import { FaGoogle, FaApple, FaEye, FaEyeSlash, FaFacebook } from "react-icons/fa";
 import { useForm } from 'react-hook-form';
 import { ErrorMessage } from "@hookform/error-message";
 import { useNavigate } from "react-router-dom";
+import axios from 'axios';
 
 const LogIn = () => {
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
+    const { register, handleSubmit, formState: { errors } } = useForm({
+        mode: 'onSubmit',
+        reValidateMode: 'onChange',
+        criteriaMode: "firstError",
+    });
 
-    const { register, handleSubmit, formState: { errors } } = useForm(
-        {
-            mode: 'onSubmit',
-            reValidateMode: 'onChange',
-            resolver: undefined,
-            criteriaMode: "firstError",
+    const onSubmit = async (data: any) => {
+        try {
+            // Sending a POST request to the backend API
+            const response = await axios.post('http://localhost:3000/user/login', {
+                email: data.Email,
+                password: data.Password,
+            });
+
+            // Handle the response from the backend
+            console.log('Login successful:', response.data);
+            // Redirect or perform additional actions here
+            navigate('/dashboard'); // Adjust this path as necessary
+        } catch (error: any) {
+            console.error('Login error:', error.response ? error.response.data : error.message);
+            // Optionally, you could display an error message to the user here
         }
-    );
-    const onSubmit = (data: any) => {
-        console.log('Submitted Data:', data);
-        // To log individual fields, you can access them like this:
-        console.log('Username:', data.Username);
-        console.log('Email:', data.Email);
-        console.log('Password:', data.Password);
     };
-    console.log(errors);
 
     const navigateToSignUp = () => {
         navigate('/sign-up', { replace: true });
-    }
+    };
 
     return (
         <form
@@ -61,14 +68,13 @@ const LogIn = () => {
                         render={({ message }) => <p className="text-[13px] text-red-700">*{message}</p>}
                     />
                 </div>
-                <div className="flex relative z-0 w-96 mb-2 group">
+                <div className="flex flex-col relative z-0 w-96 mb-2 group">
                     <input
                         type={showPassword ? "text" : "password"}
-                        id="floating_password"
+                        id="Password"
                         className="block py-4 px-2 w-full text-sm font-normal text-gray-900 bg-transparent border border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                         placeholder=" "
-                        {...register("Password", { required: true, minLength: 3 }
-                        )} // minLength instead of min
+                        {...register("Password", { required: "Password is required", minLength: { value: 3, message: "Password must be at least 3 characters" } })}
                     />
                     <label
                         htmlFor="Password"
@@ -81,6 +87,11 @@ const LogIn = () => {
                         <FaEye className={`${showPassword ? "" : "hidden"}`} />
                         <FaEyeSlash className={`${showPassword ? "hidden" : ""}`} />
                     </div>
+                    <ErrorMessage
+                        errors={errors}
+                        name="Password"
+                        render={({ message }) => <p className="text-[13px] text-red-700">*{message}</p>}
+                    />
                 </div>
                 <button type="submit" className="flex justify-center items-center relative z-0 w-96 h-14 group p-2 bg-blue-900 hover:bg-blue-800 hover:cursor-pointer">
                     <p className="text-white font-bold">Login</p>
@@ -92,13 +103,13 @@ const LogIn = () => {
                     <p className="text-[13px] text-gray-800 mb-2">other log in options</p>
                     <div className="flex flex-row justify-between items-center space-x-4">
                         <div className="p-2 border hover:cursor-pointer">
-                            <FaGoogle title="Login with Google" className="size-5"/>
+                            <FaGoogle title="Login with Google" className="size-5" />
                         </div>
                         <div className="p-2 border hover:cursor-pointer">
-                            <FaFacebook title="Login with Facebook" className="size-5"/>
+                            <FaFacebook title="Login with Facebook" className="size-5" />
                         </div>
                         <div className="p-2 border hover:cursor-pointer">
-                            <FaApple title="Login with Apple Inc" className="size-5"/>
+                            <FaApple title="Login with Apple Inc" className="size-5" />
                         </div>
                     </div>
                 </div>
@@ -107,7 +118,7 @@ const LogIn = () => {
                 </div>
             </div>
         </form>
-    )
+    );
 }
 
 export default LogIn;
