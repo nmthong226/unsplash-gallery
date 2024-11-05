@@ -79,10 +79,10 @@ const SignUp = () => {
     return (
         <form
             onSubmit={handleSubmit(onSubmit)}
-            className="flex justify-end items-center w-full h-full">
-            <div className="flex flex-col w-96 mr-80 space-y-2">
-                <h1 className="text-3xl font-bold mb-6 text-nowrap">Sign up and start exploring</h1>
-                <div className="flex flex-col relative z-0 w-96 mb-2 group">
+            className="flex justify-center items-center w-full h-full">
+            <div className="flex flex-col w-[320px] sm:w-[420px] h-[600px] justify-center items-center p-2 border shadow-md rounded-lg space-y-2">
+                <h1 className="text-xl sm:text-3xl font-bold mb-6 text-nowrap">Sign up and start exploring</h1>
+                <div className="flex flex-col relative z-0 w-[300px] sm:w-96 mb-2 group">
                     <input
                         type="text"
                         id="Username"
@@ -105,7 +105,7 @@ const SignUp = () => {
                 </div>
 
                 {/* Email Input */}
-                <div className="flex flex-col relative z-0 w-96 mb-2 group">
+                <div className="flex flex-col relative z-0 w-[300px] sm:w-96 mb-2 group">
                     <input
                         type="text"
                         id="Email"
@@ -130,7 +130,7 @@ const SignUp = () => {
                         render={({ message }) => <p className="text-[13px] text-red-700">*{message}</p>}
                     />
                 </div>
-                <div className="flex flex-col relative z-0 w-96 mb-2 group">
+                <div className="flex flex-col relative z-0 w-[300px] sm:w-96 mb-2 group">
                     <input
                         type={showPassword ? "text" : "password"}
                         id="Password"
@@ -155,7 +155,7 @@ const SignUp = () => {
                         render={({ message }) => <p className="text-[13px] text-red-700">*{message}</p>}
                     />
                 </div>
-                <div className="flex z-0 w-96">
+                <div className="flex z-0 w-[300px] sm:w-96">
                     <div className="flex items-center space-x-1">
                         {Array.from({ length: 5 }, (_, index) => (
                             <div
@@ -169,7 +169,7 @@ const SignUp = () => {
                         {strengthText}
                     </div>
                 </div>
-                <div className="flex flex-col items-start mb-2">
+                <div className="flex flex-col w-full sm w-[300px]:sm:w-96 items-start mb-2">
                     <button type="submit" className="text-white bg-blue-600 hover:bg-blue-700 w-full h-12 rounded-md transition duration-200">
                         Sign Up
                     </button>

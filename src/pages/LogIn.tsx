@@ -17,15 +17,21 @@ const LogIn = () => {
     const onSubmit = async (data: any) => {
         try {
             // Sending a POST request to the backend API
-            const response = await axios.post('http://localhost:3000/user/login', {
+            const response = await axios.post('http://localhost:3000/auth/login', {
                 email: data.Email,
                 password: data.Password,
             });
-
-            // Handle the response from the backend
-            console.log('Login successful:', response.data);
+    
+            // Assuming `response.data` contains the user data after successful login
+            const userData = response.data;
+    
+            // Save user data to local storage
+            localStorage.setItem('user', JSON.stringify(userData));
+    
+            console.log('Login successful:', userData);
+            
             // Redirect or perform additional actions here
-            navigate('/dashboard'); // Adjust this path as necessary
+            navigate('/'); // Adjust this path as necessary
         } catch (error: any) {
             console.error('Login error:', error.response ? error.response.data : error.message);
             // Optionally, you could display an error message to the user here
@@ -39,11 +45,11 @@ const LogIn = () => {
     return (
         <form
             onSubmit={handleSubmit(onSubmit)}
-            className="flex justify-end items-center w-full h-full">
-            <div className="flex flex-col w-96 mr-80 space-y-2">
+            className="flex justify-center items-center w-full h-full">
+            <div className="flex flex-col w-[320px] sm:w-[420px] h-[600px] justify-center items-center p-2 border shadow-md rounded-lg space-y-2">
                 <h1 className="text-3xl font-bold mb-6 text-nowrap text-center">Login to Unsplash</h1>
                 {/* Email Input */}
-                <div className="flex flex-col relative z-0 w-96 mb-2 group">
+                <div className="flex flex-col relative z-0 w-full sm:w-96 mb-2 group">
                     <input
                         type="text"
                         id="Email"
@@ -68,7 +74,7 @@ const LogIn = () => {
                         render={({ message }) => <p className="text-[13px] text-red-700">*{message}</p>}
                     />
                 </div>
-                <div className="flex flex-col relative z-0 w-96 mb-2 group">
+                <div className="flex flex-col relative z-0  w-full sm:w-96 mb-2 group">
                     <input
                         type={showPassword ? "text" : "password"}
                         id="Password"
@@ -93,13 +99,13 @@ const LogIn = () => {
                         render={({ message }) => <p className="text-[13px] text-red-700">*{message}</p>}
                     />
                 </div>
-                <button type="submit" className="flex justify-center items-center relative z-0 w-96 h-14 group p-2 bg-blue-900 hover:bg-blue-800 hover:cursor-pointer">
+                <button type="submit" className="flex justify-center items-center relative z-0  w-full sm:w-96 h-14 group p-2 bg-blue-900 hover:bg-blue-800 hover:cursor-pointer">
                     <p className="text-white font-bold">Login</p>
                 </button>
-                <div className="flex justify-center items-center relative z-0 w-96 h-10 group p-2">
+                <div className="flex justify-center items-center relative z-0  w-full sm:w-96 h-10 group p-2">
                     <p>or <span className="font-bold underline text-blue-800">Forgot password</span></p>
                 </div>
-                <div className="flex flex-col justify-center items-center relative z-0 w-96 group p-2">
+                <div className="flex flex-col justify-center items-center relative z-0  w-full sm:w-96 group p-2">
                     <p className="text-[13px] text-gray-800 mb-2">other log in options</p>
                     <div className="flex flex-row justify-between items-center space-x-4">
                         <div className="p-2 border hover:cursor-pointer">
@@ -113,7 +119,7 @@ const LogIn = () => {
                         </div>
                     </div>
                 </div>
-                <div className="flex justify-center items-center relative z-0 w-96 h-14 group p-2 bg-gray-100">
+                <div className="flex justify-center items-center relative z-0  w-full sm:w-96 h-14 group p-2 bg-gray-100">
                     <p className="text-gray-600 font-bold">Didn't have an account? <span className="hover:cursor-pointer font-bold underline text-blue-800" onClick={navigateToSignUp}>Sign Up</span></p>
                 </div>
             </div>
