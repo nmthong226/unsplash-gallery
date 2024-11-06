@@ -7,6 +7,7 @@ import axios from 'axios';
 
 const LogIn = () => {
     const [showPassword, setShowPassword] = useState(false);
+    const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
     const { register, handleSubmit, formState: { errors } } = useForm({
         mode: 'onSubmit',
@@ -17,24 +18,23 @@ const LogIn = () => {
     const onSubmit = async (data: any) => {
         try {
             // Sending a POST request to the backend API
-            const response = await axios.post('http://localhost:3000/auth/login', {
+            const response = await axios.post(import.meta.env.VITE_LOGIN_API, {
                 email: data.Email,
                 password: data.Password,
             });
-    
             // Assuming `response.data` contains the user data after successful login
             const userData = response.data;
-    
             // Save user data to local storage
             localStorage.setItem('user', JSON.stringify(userData));
-    
-            console.log('Login successful:', userData);
-            
             // Redirect or perform additional actions here
             navigate('/'); // Adjust this path as necessary
         } catch (error: any) {
-            console.error('Login error:', error.response ? error.response.data : error.message);
-            // Optionally, you could display an error message to the user here
+            console.log(error);
+            if (error.message && error.message.includes("401")) {
+                setError("Your email or password is incorrect. Please try again.");
+            } else {
+                setError(error.message || "An unknown error occurred");
+            }
         }
     };
 
@@ -47,7 +47,10 @@ const LogIn = () => {
             onSubmit={handleSubmit(onSubmit)}
             className="flex justify-center items-center w-full h-full">
             <div className="flex flex-col w-[320px] sm:w-[420px] h-[600px] justify-center items-center p-2 border shadow-md rounded-lg space-y-2">
-                <h1 className="text-3xl font-bold mb-6 text-nowrap text-center">Login to Unsplash</h1>
+                <div className="flex flex-col mb-6 justify-center items-center space-y-2">
+                    <h1 className="text-3xl font-bold text-nowrap text-center">Login to Unsplash</h1>
+                    <p className="text-red-500 text-[13px]">{error ? error : ""}</p>
+                </div>
                 {/* Email Input */}
                 <div className="flex flex-col relative z-0 w-full sm:w-96 mb-2 group">
                     <input
