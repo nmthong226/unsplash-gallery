@@ -9,6 +9,7 @@ const SignUp = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [strengthText, setStrengthText] = useState("");
     const [strengthPercentage, setStrengthPercentage] = useState(0);
+    const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
 
     const { register, handleSubmit, formState: { errors } } = useForm(
@@ -22,17 +23,18 @@ const SignUp = () => {
 
     const onSubmit = async (data: any) => {
         try {
-            const response = await axios.post('http://localhost:3000/auth/register', {
+            const response = await axios.post(import.meta.env.VITE_REGISTER_API, {
                 username: data.Username,
                 email: data.Email,
                 password: data.Password,
             });
-            console.log('Response:', response.data);
-            // Redirect to login or show success message
             navigate("/login", { replace: true });
-        } catch (error) {
-            console.error('Error during signup:', error);
-            // Handle the error (show a notification, etc.)
+        } catch (error: any) {
+            if (error.message && error.message.includes("409")) {
+                setError("Your email already exists. Please try another one.");
+            } else {
+                setError(error.message || "An unknown error occurred");
+            }
         }
     };
 
@@ -81,7 +83,10 @@ const SignUp = () => {
             onSubmit={handleSubmit(onSubmit)}
             className="flex justify-center items-center w-full h-full">
             <div className="flex flex-col w-[320px] sm:w-[420px] h-[600px] justify-center items-center p-2 border shadow-md rounded-lg space-y-2">
-                <h1 className="text-xl sm:text-3xl font-bold mb-6 text-nowrap">Sign up and start exploring</h1>
+                <div className="flex flex-col mb-6 justify-center items-center space-y-2">
+                    <h1 className="text-xl sm:text-3xl font-bold text-nowrap">Sign up and start exploring</h1>
+                    <p className="text-red-500 text-[13px]">{error ? error : ""}</p>
+                </div>
                 <div className="flex flex-col relative z-0 w-[300px] sm:w-96 mb-2 group">
                     <input
                         type="text"
@@ -95,7 +100,6 @@ const SignUp = () => {
                         className="peer-focus:font-bold absolute text-sm font-bold text-gray-800 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-4 pl-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4">
                         Fullname
                     </label>
-
                     {/* Error Message for Username */}
                     <ErrorMessage
                         errors={errors}
@@ -170,7 +174,7 @@ const SignUp = () => {
                     </div>
                 </div>
                 <div className="flex flex-col w-full sm w-[300px]:sm:w-96 items-start mb-2">
-                    <button type="submit" className="text-white bg-blue-600 hover:bg-blue-700 w-full h-12 rounded-md transition duration-200">
+                    <button type="submit" className="text-white bg-blue-900 hover:bg-blue-800 w-full h-12 rounded-md transition duration-200">
                         Sign Up
                     </button>
                 </div>
