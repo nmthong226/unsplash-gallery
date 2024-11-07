@@ -1,29 +1,26 @@
+// src/App.tsx
 import { BrowserRouter as Router, Routes, Route, Navigate, useParams } from 'react-router-dom';
+import { useAuth } from './context/AuthContext';
 import PhotoGallery from '@/components/PhotoGallery';
-import NotFound from '@/pages/NotFound';
+import NotFound from '@/pages/NotFound/NotFound';
 import useFetchPhotos from '@/hooks/useFetchPhotos';
-import './App.css';
 import SignUp from './pages/SignUp';
 import LogIn from './pages/LogIn';
+import Profile from './pages/Profile';
 
 function App() {
   const { photos, fetchPhotos, hasMore, loading, error } = useFetchPhotos();
+  const { isAuthenticated } = useAuth();
 
   return (
     <Router>
       <div className="flex flex-col w-full h-screen">
         <Routes>
-          {/* Redirect from "/" to "/photos" */}
           <Route path="/" element={<Navigate to="/photos" />} />
-          {/* Handle photo detail slug */}
           <Route
             path="/photos/:slug"
-            element={
-              // Check if the slug is valid
-              <PhotoDetailRedirect photos={photos} />
-            }
+            element={<PhotoDetailRedirect photos={photos} />}
           />
-          {/* Main photo gallery */}
           <Route
             path="/photos"
             element={
@@ -36,9 +33,14 @@ function App() {
               />
             }
           />
-          <Route path='/sign-up' element={<SignUp />} />
-          <Route path='/login' element={<LogIn />} />
-          {/* Catch-all route for invalid paths */}
+          <Route path="/sign-up" element={<SignUp />} />
+          <Route path="/login" element={<LogIn />} />
+          <Route
+            path="/profile"
+            element={
+              isAuthenticated ? <Profile /> : <Navigate to="/login" replace />
+            }
+          />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
@@ -48,11 +50,8 @@ function App() {
 
 export default App;
 
-// New component to handle slug validation
 const PhotoDetailRedirect = ({ photos }: { photos: Photo[] }) => {
   const { slug } = useParams();
-
   const isValidSlug = photos.some(photo => photo.slug === slug);
-
   return isValidSlug ? <Navigate to="/photos" /> : <NotFound />;
 };
