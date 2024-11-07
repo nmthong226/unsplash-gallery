@@ -3,12 +3,14 @@ import { FaGoogle, FaApple, FaEye, FaEyeSlash, FaFacebook } from "react-icons/fa
 import { useForm } from 'react-hook-form';
 import { ErrorMessage } from "@hookform/error-message";
 import { useNavigate } from "react-router-dom";
-import axios from 'axios';
+import { useAuth } from "@/context/AuthContext";
 
 const LogIn = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
+    const { login } = useAuth();
+
     const { register, handleSubmit, formState: { errors } } = useForm({
         mode: 'onSubmit',
         reValidateMode: 'onChange',
@@ -17,24 +19,10 @@ const LogIn = () => {
 
     const onSubmit = async (data: any) => {
         try {
-            // Sending a POST request to the backend API
-            const response = await axios.post(import.meta.env.VITE_LOGIN_API, {
-                email: data.Email,
-                password: data.Password,
-            });
-            // Assuming `response.data` contains the user data after successful login
-            const userData = response.data;
-            // Save user data to local storage
-            localStorage.setItem('user', JSON.stringify(userData));
-            // Redirect or perform additional actions here
-            navigate('/'); // Adjust this path as necessary
-        } catch (error: any) {
-            console.log(error);
-            if (error.message && error.message.includes("401")) {
-                setError("Your email or password is incorrect. Please try again.");
-            } else {
-                setError(error.message || "An unknown error occurred");
-            }
+            await login(data);
+            navigate('/', {replace: true});
+        } catch (e: any) {
+            setError(e.message || 'An error occurred');
         }
     };
 
