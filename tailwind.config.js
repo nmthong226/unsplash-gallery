@@ -10,6 +10,9 @@ export default {
 			fontFamily: {
 				sans: ['Roboto', 'sans-serif'],
 			},
+			screens: {
+				'xsm': '425px',
+			}
 		},
 	},
 	plugins: [require("tailwindcss-animate")],
