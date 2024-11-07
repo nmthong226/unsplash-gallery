@@ -5,6 +5,8 @@ import PhotoDetail from '@/components/PhotoDetail';
 import './style.css';
 import ThemeButton from '../ui/ThemeButton';
 import { useNavigate } from 'react-router-dom';
+import { FiLogOut } from "react-icons/fi";
+import { FaRegUserCircle } from "react-icons/fa";
 
 interface PhotoGalleryProps {
     photos: Photo[];
@@ -45,6 +47,9 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
         setDropdownVisible(false);
     };
 
+    const navigateToProfile = () => {
+        navigate('/profile', { replace: true });
+    }
 
     const masonryBreakpoints = {
         default: 3,
@@ -118,8 +123,8 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                         </button>
                     </div>
                 ) : (
-                    <div className="flex items-center absolute top-1/2 right-2 transform -translate-y-1/2 space-x-1">
-                        <p className="text-[13px] text-gray-600 mr-2">{userData?.user.name}</p>
+                    <div className="flex items-center absolute top-1/2 right-2 transform -translate-y-1/2 space-x-1 z-50">
+                        <p className="max-sm:hidden text-[13px] text-gray-600 mr-2">{userData?.user.name}</p>
                         <div className="relative">
                             <div
                                 className="flex p-2 rounded-full border bg-white cursor-pointer"
@@ -133,11 +138,20 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                                 />
                             </div>
                             {dropdownVisible && (
-                                <div className="absolute right-0 mt-2 w-32 bg-white border rounded-lg shadow-lg z-20">
+                                <div className="absolute right-0 mt-4 w-36 p-2 px-0 bg-white border rounded-lg shadow-lg">
+                                    <button
+                                        onClick={navigateToProfile}
+                                        className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-left"
+                                    >
+                                        <FaRegUserCircle className='mr-2' />
+                                        Profile
+                                    </button>
+                                    <hr className='border' />
                                     <button
                                         onClick={handleLogout}
-                                        className="w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-left"
+                                        className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-left"
                                     >
+                                        <FiLogOut className='mr-2' />
                                         Logout
                                     </button>
                                 </div>
