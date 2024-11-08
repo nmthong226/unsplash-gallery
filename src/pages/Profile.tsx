@@ -11,13 +11,34 @@ import { TiHome } from "react-icons/ti";
 import { useNavigate } from "react-router-dom";
 import { FiLogOut } from "react-icons/fi";
 import { MdOutlineMailOutline } from "react-icons/md";
+import Cookies from "js-cookie";
+import { useAuth } from "@/hooks/useAuth";
+import { useEffect } from "react";
 
-const Profile = () => {
+interface ProfileProps {
+  user: User | null;
+}
+
+const Profile: React.FC<ProfileProps> = (user) => {
   const navigate = useNavigate();
+  const { fetchUserProfile } = useAuth();
   const logout = () => {
     localStorage.clear();
+    Cookies.remove("token");
     navigate("/login", { replace: true });
   }
+
+  useEffect(() => {
+    if (!user.user) {
+      const token = Cookies.get('token');
+      if (token) {
+        fetchUserProfile(token);
+      } else {
+        navigate('/login', { replace: true });
+      }
+    }
+  }, [user, fetchUserProfile, navigate]);
+
   return (
     <div className="flex flex-col w-full h-full items-center mt-20">
       <div>
@@ -47,14 +68,14 @@ const Profile = () => {
               className="fill-gray-200"
             />
             <div className="flex flex-col">
-              <p className="font-bold text-lg xsm:text-2xl">Nguyen Minh Thong</p>
+              <p className="font-bold text-lg xsm:text-2xl">{user.user?.username}</p>
               <p className="flex flex-row items-center text-[13px] line-clamp-1 w-full">
                 <MdOutlineMailOutline className="flex mr-2" />
-                nmthong226@gmail.com
+                {user.user?.email}
               </p>
               <p className="flex flex-row items-center text-[13px]">
                 <BiTaskX className="mr-2" />
-                05/11/2024
+                {user.user?.username}
               </p>
             </div>
           </div>
