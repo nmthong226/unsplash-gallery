@@ -3,7 +3,8 @@ import { FaGoogle, FaApple, FaEye, FaEyeSlash, FaFacebook } from "react-icons/fa
 import { useForm } from 'react-hook-form';
 import { ErrorMessage } from "@hookform/error-message";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/hooks/useAuth";
+import { Bounce, toast } from 'react-toastify';
 
 const LogIn = () => {
     const [showPassword, setShowPassword] = useState(false);
@@ -20,7 +21,7 @@ const LogIn = () => {
     const onSubmit = async (data: any) => {
         try {
             await login(data);
-            navigate('/', {replace: true});
+            navigate('/', { replace: true });
         } catch (e: any) {
             setError(e.message || 'An error occurred');
         }
@@ -30,6 +31,20 @@ const LogIn = () => {
         navigate('/sign-up', { replace: true });
     };
 
+
+    const loginWithOtherOtions = () => {
+        toast.info('Sorry! Not working now!', {
+            position: "bottom-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Bounce,
+        });
+    }
     return (
         <form
             onSubmit={handleSubmit(onSubmit)}
@@ -56,7 +71,7 @@ const LogIn = () => {
                     />
                     <label
                         htmlFor="Email"
-                        className="peer-focus:font-bold absolute text-sm font-bold text-gray-800 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-4 pl-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4">
+                        className="absolute text-sm font-bold text-gray-800 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-4 pl-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4 peer-focus:font-bold ">
                         Email
                     </label>
                     <ErrorMessage
@@ -100,13 +115,13 @@ const LogIn = () => {
                     <p className="text-[13px] text-gray-800 mb-2">other log in options</p>
                     <div className="flex flex-row justify-between items-center space-x-4">
                         <div className="p-2 border hover:cursor-pointer">
-                            <FaGoogle title="Login with Google" className="size-5" />
+                            <FaGoogle title="Login with Google" className="size-5" onClick={loginWithOtherOtions}/>
                         </div>
                         <div className="p-2 border hover:cursor-pointer">
-                            <FaFacebook title="Login with Facebook" className="size-5" />
+                            <FaFacebook title="Login with Facebook" className="size-5" onClick={loginWithOtherOtions}/>
                         </div>
                         <div className="p-2 border hover:cursor-pointer">
-                            <FaApple title="Login with Apple Inc" className="size-5" />
+                            <FaApple title="Login with Apple Inc" className="size-5" onClick={loginWithOtherOtions}/>
                         </div>
                     </div>
                 </div>
