@@ -1,16 +1,18 @@
 // src/App.tsx
 import { BrowserRouter as Router, Routes, Route, Navigate, useParams } from 'react-router-dom';
-import { useAuth } from './context/AuthContext';
+import { useAuth } from '@/hooks/useAuth';
 import PhotoGallery from '@/components/PhotoGallery';
 import NotFound from '@/pages/NotFound/NotFound';
 import useFetchPhotos from '@/hooks/useFetchPhotos';
 import SignUp from './pages/SignUp';
 import LogIn from './pages/LogIn';
 import Profile from './pages/Profile';
+import { Bounce, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const { photos, fetchPhotos, hasMore, loading, error } = useFetchPhotos();
-  const { isAuthenticated } = useAuth();
+  const { user, userLoading } = useAuth();
 
   return (
     <Router>
@@ -30,19 +32,30 @@ function App() {
                 hasMore={hasMore}
                 loading={loading}
                 error={error}
+                user={user}
+                userLoading={userLoading}
               />
             }
           />
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/login" element={<LogIn />} />
-          <Route
-            path="/profile"
-            element={
-              isAuthenticated ? <Profile /> : <Navigate to="/login" replace />
-            }
-          />
+          <Route path="/profile" element={<Profile user={user} />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <ToastContainer
+          position="bottom-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+          stacked
+          transition={Bounce}
+        />
       </div>
     </Router>
   );
