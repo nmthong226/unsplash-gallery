@@ -7,13 +7,16 @@ import ThemeButton from '../ui/ThemeButton';
 import { useNavigate } from 'react-router-dom';
 import { FiLogOut } from "react-icons/fi";
 import { FaRegUserCircle } from "react-icons/fa";
+import { useAuth } from '@/hooks/useAuth';
 
 interface PhotoGalleryProps {
     photos: Photo[];
     fetchPhotos: () => void;
     hasMore: boolean;
     loading: boolean;
-    error?: string | null; // Add optional error prop
+    error?: string | null;
+    user: User | null;
+    userLoading: boolean;
 }
 
 const PhotoGallery: React.FC<PhotoGalleryProps> = ({
@@ -22,28 +25,20 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
     hasMore,
     loading,
     error,
+    user,
+    userLoading
 }) => {
+    const { logout } = useAuth();
     const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
     const [showModal, setShowModal] = useState(false);
-    const [userData, setUserData] = useState<any>(null);  // New state for user data
     const [dropdownVisible, setDropdownVisible] = useState(false);
-
-    useEffect(() => {
-        // Fetch user data from local storage
-        const storedUser = localStorage.getItem('user');
-        console.log(storedUser);
-        if (storedUser) {
-            setUserData(JSON.parse(storedUser));
-        }
-    }, []);
 
     const toggleDropdown = () => {
         setDropdownVisible(!dropdownVisible);
     };
 
     const handleLogout = () => {
-        localStorage.removeItem('userData');
-        setUserData(null);
+        logout();
         setDropdownVisible(false);
     };
 
@@ -109,60 +104,64 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                         nmthong226
                     </a>
                 </div>
-                {!userData ? (
-                    <div className='flex absolute top-1/2 right-2 transform -translate-y-1/2 space-x-1'>
-                        <button
-                            onClick={navigateToSignUp}
-                            className=' text-zinc-900 hover:text-zinc-600 py-1 px-4 rounded-lg'>
-                            Sign up
-                        </button>
-                        <button
-                            onClick={navigateToSignIn}
-                            className=' bg-zinc-900 text-white hover:bg-white hover:text-zinc-900 hover:border-zinc-900 border border-gray-50  py-1 px-4 rounded-lg'>
-                            Log In
-                        </button>
-                    </div>
-                ) : (
-                    <div className="flex items-center absolute top-1/2 right-2 transform -translate-y-1/2 space-x-1 z-50">
-                        <p className="max-sm:hidden text-[13px] text-gray-600 mr-2">{userData?.user.name}</p>
-                        <div className="relative">
-                            <div
-                                className="flex p-2 rounded-full border bg-white cursor-pointer"
-                                onClick={toggleDropdown}
-                            >
-                                <img
-                                    width="20"
-                                    height="20"
-                                    src="https://img.icons8.com/material-rounded/24/user.png"
-                                    alt="user"
-                                />
-                            </div>
-                            {dropdownVisible && (
-                                <div className="absolute right-0 mt-4 w-36 p-2 px-0 bg-white border rounded-lg shadow-lg">
-                                    <button
-                                        onClick={navigateToProfile}
-                                        className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-left"
-                                    >
-                                        <FaRegUserCircle className='mr-2' />
-                                        Profile
-                                    </button>
-                                    <hr className='border' />
-                                    <button
-                                        onClick={handleLogout}
-                                        className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-left"
-                                    >
-                                        <FiLogOut className='mr-2' />
-                                        Logout
-                                    </button>
+                {!userLoading ? (
+                    user ? (
+                        <div className="flex items-center absolute top-1/2 right-2 transform -translate-y-1/2 space-x-1 z-50">
+                            <p className="max-sm:hidden text-[13px] text-gray-600 mr-2">{user?.username}</p>
+                            <div className="relative">
+                                <div
+                                    className="flex p-2 rounded-full border bg-white cursor-pointer"
+                                    onClick={toggleDropdown}
+                                >
+                                    <img
+                                        width="20"
+                                        height="20"
+                                        src="https://img.icons8.com/material-rounded/24/user.png"
+                                        alt="user"
+                                    />
                                 </div>
-                            )}
+                                {dropdownVisible && (
+                                    <div className="absolute right-0 mt-4 w-36 p-2 px-0 bg-white border rounded-lg shadow-lg">
+                                        <button
+                                            onClick={navigateToProfile}
+                                            className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-left"
+                                        >
+                                            <FaRegUserCircle className='mr-2' />
+                                            Profile
+                                        </button>
+                                        <hr className='border' />
+                                        <button
+                                            onClick={handleLogout}
+                                            className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-left"
+                                        >
+                                            <FiLogOut className='mr-2' />
+                                            Logout
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
                         </div>
+                    ) : (
+                        <div className='flex absolute top-1/2 right-2 transform -translate-y-1/2 space-x-1'>
+                            <button
+                                onClick={navigateToSignUp}
+                                className=' text-zinc-900 hover:text-zinc-600 py-1 px-4 rounded-lg'>
+                                Sign up
+                            </button>
+                            <button
+                                onClick={navigateToSignIn}
+                                className=' bg-zinc-900 text-white hover:bg-white hover:text-zinc-900 hover:border-zinc-900 border border-gray-50  py-1 px-4 rounded-lg'>
+                                Log In
+                            </button>
+                        </div>
+                    )
+                ) : (
+                    <div className="flex absolute top-1/2 right-2 transform -translate-y-1/2">
+                        <div className="w-6 h-6 border-2 border-t-transparent border-gray-300 rounded-full animate-spin"></div>
                     </div>
                 )}
             </div>
-
             {error && <div className="error-message text-red-500 mb-4">{error}</div>}
-
             <InfiniteScroll
                 dataLength={photos.length}
                 next={fetchPhotos}
