@@ -23,3 +23,9 @@ type Photo = {
     likes: string;
     slug: string;
 };
+
+type User = {
+    id: string;
+    email: string;
+    username: string;   
+}
