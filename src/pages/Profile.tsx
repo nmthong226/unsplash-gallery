@@ -14,6 +14,7 @@ import { MdOutlineMailOutline } from "react-icons/md";
 import Cookies from "js-cookie";
 import { useAuth } from "@/hooks/useAuth";
 import { useEffect } from "react";
+import { format } from 'date-fns';
 
 interface ProfileProps {
   user: User | null;
@@ -38,7 +39,6 @@ const Profile: React.FC<ProfileProps> = (user) => {
       }
     }
   }, [user, fetchUserProfile, navigate]);
-
   return (
     <div className="flex flex-col w-full h-full items-center mt-20">
       <div>
@@ -75,7 +75,7 @@ const Profile: React.FC<ProfileProps> = (user) => {
               </p>
               <p className="flex flex-row items-center text-[13px]">
                 <BiTaskX className="mr-2" />
-                {user.user?.username}
+                {user.user?.createdAt ? format(new Date(user.user.createdAt), 'dd/MM/yyyy') : ''}
               </p>
             </div>
           </div>
