@@ -26,6 +26,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const token = Cookies.get('token');
         if (token) {
             fetchUserProfile(token);
+        } else 
+        {
+            setUserLoading(false);
         }
     }, []);
     const fetchUserProfile = async (token: string) => {
