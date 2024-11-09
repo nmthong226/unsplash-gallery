@@ -22,7 +22,8 @@ interface ProfileProps {
 
 const Profile: React.FC<ProfileProps> = (user) => {
   const navigate = useNavigate();
-  const { fetchUserProfile } = useAuth();
+  const { fetchUserProfile, userLoading } = useAuth();
+
   const logout = () => {
     localStorage.clear();
     Cookies.remove("token");
@@ -67,17 +68,31 @@ const Profile: React.FC<ProfileProps> = (user) => {
               alt="external-User-users-those-icons-fill-those-icons-3"
               className="fill-gray-200"
             />
-            <div className="flex flex-col">
-              <p className="font-bold text-lg xsm:text-2xl">{user.user?.username}</p>
-              <p className="flex flex-row items-center text-[13px] line-clamp-1 w-full">
-                <MdOutlineMailOutline className="flex mr-2" />
-                {user.user?.email}
-              </p>
-              <p className="flex flex-row items-center text-[13px]">
-                <BiTaskX className="mr-2" />
-                {user.user?.createdAt ? format(new Date(user.user.createdAt), 'dd/MM/yyyy') : ''}
-              </p>
-            </div>
+            {userLoading ? (
+              <div className="flex flex-col w-full h-full space-y-2">
+                <div className="flex w-full sm:w-[60%] h-[23px] animate-pulse bg-gray-200 rounded" />
+                <div className="flex flex-row w-full sm:w-[60%] h-4">
+                  <MdOutlineMailOutline className="flex mr-2" />
+                  <div className="w-full sm:w-[60%] animate-pulse bg-gray-200 rounded" />
+                </div>
+                <div className="flex flex-row w-full sm:w-[60%] h-4">
+                  <BiTaskX className="mr-2" />
+                  <div className="w-full sm:w-[60%] animate-pulse bg-gray-200 rounded" />
+                </div>
+              </div>
+            ) : (
+              <div className="flex flex-col">
+                <p className="font-bold text-lg xsm:text-2xl">{user.user?.username}</p>
+                <p className="flex flex-row items-center text-[13px] line-clamp-1 w-full">
+                  <MdOutlineMailOutline className="flex mr-2" />
+                  {user.user?.email}
+                </p>
+                <p className="flex flex-row items-center text-[13px]">
+                  <BiTaskX className="mr-2" />
+                  {user.user?.createdAt ? format(new Date(user.user.createdAt), 'dd/MM/yyyy') : ''}
+                </p>
+              </div>
+            )}
           </div>
           <hr className="w-full border" />
           <div className="flex justify-end items-end h-full space-x-10">
