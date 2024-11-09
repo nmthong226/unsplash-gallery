@@ -48,7 +48,6 @@ const SignUp = () => {
         if (/[0-9]/.test(password)) strength += 20; // Number
         if (/[\W_]/.test(password)) strength += 20; // Special character
         setStrengthPercentage(strength);
-
         // Set strength text based on calculated strength
         if (strength === 0) {
             setStrengthText("");
@@ -71,6 +70,7 @@ const SignUp = () => {
 
     const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newPassword = e.target.value;
+        console.log(newPassword);
         calculateStrength(newPassword);
     };
 
@@ -164,12 +164,12 @@ const SignUp = () => {
                         {Array.from({ length: 5 }, (_, index) => (
                             <div
                                 key={index}
-                                className={`w-7 border-4 rounded-sm border-t border-gray-400 ${strengthPercentage > index * 20 ? "border-blue-600" : "border-gray-400"
+                                className={`w-7 border-4 rounded-sm border-t ${strengthPercentage > index * 20 ? "border-blue-600" : "border-gray-400"
                                     }`}
                             ></div>
                         ))}
                     </div>
-                    <div className={`flex items-center text-[13px] h-4 text-gray-600 ml-2 my-1 ${strengthPercentage >= 80 ? "text-green-600" : strengthPercentage >= 40 ? "text-yellow-500" : "text-red-600"}`}>
+                    <div className={`flex items-center text-[13px] h-4 text-gray-600 ml-2 my-1`}>
                         {strengthText}
                     </div>
                 </div>
