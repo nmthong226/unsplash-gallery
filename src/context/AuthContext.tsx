@@ -50,6 +50,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             setUser(user);
             Cookies.set('token', token, { expires: 7 });
         } catch (error: any) {
+            console.log(error);
             throw new Error(error.response?.data?.message || 'Login failed');
         }
     };
