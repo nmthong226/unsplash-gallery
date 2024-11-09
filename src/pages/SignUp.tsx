@@ -23,7 +23,7 @@ const SignUp = () => {
 
     const onSubmit = async (data: any) => {
         try {
-            const response = await axios.post(import.meta.env.VITE_REGISTER_API, {
+            await axios.post(import.meta.env.VITE_REGISTER_API, {
                 username: data.Username,
                 email: data.Email,
                 password: data.Password,
