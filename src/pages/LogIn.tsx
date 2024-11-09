@@ -12,7 +12,7 @@ const LogIn = () => {
     const navigate = useNavigate();
     const { login } = useAuth();
 
-    const { register, handleSubmit, formState: { errors } } = useForm({
+    const { register, handleSubmit, setValue, formState: { errors } } = useForm({
         mode: 'onSubmit',
         reValidateMode: 'onChange',
         criteriaMode: "firstError",
@@ -45,6 +45,13 @@ const LogIn = () => {
             transition: Bounce,
         });
     }
+
+    // Set email and password fields with preset values
+    const fillDemoCredentials = () => {
+        setValue("Email", "janedoe123@gmail.com");
+        setValue("Password", "janedoe123");
+    };
+
     return (
         <form
             onSubmit={handleSubmit(onSubmit)}
@@ -52,6 +59,7 @@ const LogIn = () => {
             <div className="flex flex-col w-[320px] sm:w-[420px] h-[600px] justify-center items-center p-2 border shadow-md rounded-lg space-y-2">
                 <div className="flex flex-col mb-6 justify-center items-center space-y-2">
                     <h1 className="text-3xl font-bold text-nowrap text-center">Login to Unsplash</h1>
+                    <p className="flex flex-col text-[13px] hover:cursor-pointer" onClick={fillDemoCredentials}>janedoe123@gmail.com - janedoe123</p>
                     <p className="text-red-500 text-[13px]">{error ? error : ""}</p>
                 </div>
                 {/* Email Input */}
