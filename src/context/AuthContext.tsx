@@ -37,8 +37,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setUser(response.data);
-        } catch (error) {
-            console.error('Failed to fetch user profile', error);
+        } catch (error: any) {
+            console.log(error);
+            throw new Error(error.response?.data?.message || 'Unauthorized');
         } finally {
             setUserLoading(false);
         }
