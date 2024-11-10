@@ -34,12 +34,20 @@ const Profile: React.FC<ProfileProps> = (user) => {
     if (!user.user) {
       const token = Cookies.get('token');
       if (token) {
-        fetchUserProfile(token);
+        (async () => {
+          try {
+            await fetchUserProfile(token);
+          } catch (error) {
+            navigate('/login', { replace: true });
+          }
+        })();
       } else {
         navigate('/login', { replace: true });
       }
     }
   }, [user, fetchUserProfile, navigate]);
+  
+
   return (
     <div className="flex flex-col w-full h-full items-center mt-20">
       <div>
