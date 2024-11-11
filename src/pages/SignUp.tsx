@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { ErrorMessage } from "@hookform/error-message";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios'; // Import axios
+import { Bounce, toast } from "react-toastify";
 
 const SignUp = () => {
     const [showPassword, setShowPassword] = useState(false);
@@ -27,8 +28,23 @@ const SignUp = () => {
                 username: data.Username,
                 email: data.Email,
                 password: data.Password,
-            });
-            navigate("/login", { replace: true });
+            }).then(response => {
+                if (response.data.userId) {
+                    toast.success('Your account is created', {
+                        position: "bottom-right",
+                        autoClose: 3000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "light",
+                        transition: Bounce,
+                    });
+                }
+            }).finally(() => {
+                navigate("/login", { replace: true });
+            })
         } catch (error: any) {
             if (error.message && error.message.includes("409")) {
                 setError("Your email already exists. Please try another one.");
