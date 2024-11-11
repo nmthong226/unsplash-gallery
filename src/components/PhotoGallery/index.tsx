@@ -6,6 +6,7 @@ import './style.css';
 import ThemeButton from '../ui/ThemeButton';
 import { useNavigate } from 'react-router-dom';
 import { FiLogOut } from "react-icons/fi";
+import { IoIosArrowDown } from "react-icons/io";
 import { FaRegUserCircle } from "react-icons/fa";
 import { useAuth } from '@/hooks/useAuth';
 
@@ -93,25 +94,18 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
     }
     return (
         <div className="flex flex-col w-full p-2 px-0 md:px-20 lg:px-40 h-full items-center">
-            <div className='relative flex flex-row items-center justify-center my-10 p-2 bg-gray-50 border rounded-lg w-full'>
+            <div className='relative flex flex-row items-center justify-center my-10 p-2 py-4 bg-gray-50 border rounded-lg w-full'>
                 <ThemeButton toggleTheme={() => { }} className='absolute top-1/2 left-2 transform -translate-y-1/2' />
                 <div className='flex flex-col justify-center items-center'>
                     <h1 className="flex items-center text-lg lg:text-xl font-bold">Unsplash Gallery</h1>
-                    <a
-                        href='https://github.com/nmthong226'
-                        target='_blank'
-                        className='font-thin text-sm text-gray-700'>
-                        nmthong226
-                    </a>
                 </div>
                 {!userLoading ? (
                     user ? (
                         <div className="flex items-center absolute top-1/2 right-2 transform -translate-y-1/2 space-x-1 z-50">
                             <p className="max-sm:hidden text-[13px] text-gray-600 mr-2">{user?.username}</p>
-                            <div className="relative">
+                            <div className="relative flex items-center space-x-1 hover:cursor-pointer" onClick={toggleDropdown}>
                                 <div
                                     className="flex p-2 rounded-full border bg-white cursor-pointer"
-                                    onClick={toggleDropdown}
                                 >
                                     <img
                                         width="20"
@@ -120,8 +114,9 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                                         alt="user"
                                     />
                                 </div>
+                                <IoIosArrowDown className="text-gray-600" />
                                 {dropdownVisible && (
-                                    <div className="absolute right-0 mt-4 w-36 p-2 px-0 bg-white border rounded-lg shadow-lg">
+                                    <div className="absolute right-0 mt-14 top-0 w-36 p-2 px-0 bg-white border rounded-lg shadow-lg">
                                         <button
                                             onClick={navigateToProfile}
                                             className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-left"
