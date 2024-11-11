@@ -39,7 +39,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             setUser(response.data);
         } catch (error: any) {
             console.log(error);
-            throw new Error(error.response?.data?.message || 'Unauthorized');
+            throw new Error('Your credentials are incorrect. Please try again.');
         } finally {
             setUserLoading(false);
         }
@@ -52,7 +52,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             Cookies.set('token', token, { expires: 7 });
         } catch (error: any) {
             console.log(error);
-            throw new Error(error.response?.data?.message || 'Login failed');
+            throw new Error('*Your email or password is incorrect. Please try again.');
         }
     };
     const logout = () => {
